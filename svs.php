@@ -98,6 +98,9 @@ class Scanner
 		$this->scanExtentions = "~\.(" . join("|", $exts) . ")$~i";
 	}
 
+	/**
+	 * Выводит сообщение об ошибке
+	 */
 	public function error($errorText)
 	{
 		if ($this->isWeb) {
@@ -107,6 +110,9 @@ class Scanner
 		}
 	}
 
+	/**
+	 * Выводит строку в правильном формате в зависимости от окружения
+	 */
 	private function out($message)
 	{
 		if ($this->isWeb) {
@@ -116,6 +122,9 @@ class Scanner
 		}
 	}
 
+	/**
+	 * Строит массив с файлами для последующего сканирования
+	 */
 	public function buildScanList($startDir = "", $level = 0)
 	{
 		// $this->out($startDir);
@@ -165,6 +174,9 @@ class Scanner
 		}
 	}
 
+	/**
+	 * Проверяет путь и имя файла на совпадение со списком файлов-исключений
+	 */
 	function isExclusion($dirPath, $fileName)
 	{
 		$fullPath = ($dirPath == "/") ? $this->rootFolder : $this->rootFolder . $dirPath;
@@ -209,14 +221,8 @@ class Scanner
 
 		$isEx =  false;
 
-		if ($fileName == basename(__FILE__)) {
-			// $this->out('svs  - '.$file.": ".filesize($file).",".$this->selfSize);
-			// if (filesize($file) == $this->selfSize) {
-			// 	$contents = file_get_contents($file);
-			// 	if (crc32($contents) == $this->selfCRC) {
-			// 		$isEx = true;
-			// 	}
-			// }
+		//себя тоже добавляем в список исключений
+		if ($fileName == __FILE__) {
 			$isEx = true;
 		}
 
@@ -229,6 +235,10 @@ class Scanner
 
 		return $isEx;
 	}
+
+	/**
+	 * Сканируем файл на опасные факторы
+	 */
 
 	function scanFile($id)
 	{
@@ -431,7 +441,9 @@ class Scanner
 	}
 
 
-
+/**
+ * Запускает сканирование каждого файла в списке
+ */
 	public function scanFiles()
 	{
 		foreach ($this->scanList as $id => $entry) {
@@ -439,6 +451,9 @@ class Scanner
 		}
 	}
 
+	/**
+	 * Используется для отладки
+	 */
 	private function pre($var, $export =  false)
 	{
 		if ($this->isWeb) echo ("<pre>");
@@ -452,6 +467,9 @@ class Scanner
 		if ($this->isWeb) echo ("</pre>");
 	}
 
+	/**
+	 * Сортирует список сканирования
+	 */
 	public function sortScanList(){
 		global $noSort;
 		$noSort = $this->noSort;
@@ -475,6 +493,9 @@ class Scanner
 		usort($this->scanList, "comp1");
 	}
 
+	/**
+	 * Выводит отчёт по результатам сканирования
+	 */
 	public function printScanList()
 	{
 		$marker = $this->isWeb ? "&bull;" : "+";
@@ -598,8 +619,8 @@ class Scanner
 	}
 }
 
-$s = new Scanner();
-$s->buildScanList();
-$s->scanFiles();
-$s->sortScanList();
-$s->printScanList();
+$scanner = new Scanner();
+$scanner->buildScanList();
+$scanner->scanFiles();
+$scanner->sortScanList();
+$scanner->printScanList();
