@@ -428,8 +428,8 @@ class Scanner
 		}
 		$rbc->inc();
 
-		//usage of Authorize(\d) function
-		if (preg_match('~Authorize\(\d~', $contents) > 0) {
+		//usage of $USER->Authorize() function with int parameter
+		if (preg_match('~\$USER->Authorize\([^\$]~', $contents) > 0) {
 			$entry['score'] = $entry['score'] + 50;
 			$entry['diag']['authorize'] = $rbc->rainbow('authorize()');
 		}
